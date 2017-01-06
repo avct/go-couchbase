@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	"github.com/avct/go-couchbase"
 	"github.com/couchbase/gomemcached"
 	"github.com/couchbase/gomemcached/client"
-	"github.com/couchbase/go-couchbase"
 	"log"
 	"time"
 )

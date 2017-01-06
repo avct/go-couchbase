@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	atomic "github.com/couchbase/go-couchbase/platform"
+	atomic "github.com/avct/go-couchbase/platform"
 )
 
 func main() {

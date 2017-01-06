@@ -21,7 +21,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/couchbase/go-couchbase"
+	"github.com/avct/go-couchbase"
 	"github.com/couchbase/gomemcached"
 	"github.com/couchbase/gomemcached/client"
 )
@@ -605,10 +605,10 @@ func TestConnectError(t *testing.T) {
 		vbsm: &couchbase.VBucketServerMap{
 			ServerList: []string{"serverA"},
 			VBucketMap: [][]int{
-				[]int{0},
-				[]int{0},
-				[]int{0},
-				[]int{0},
+				{0},
+				{0},
+				{0},
+				{0},
 			},
 		},
 	}
@@ -692,10 +692,10 @@ func TestConnThatAlwaysErrors(t *testing.T) {
 		vbsm: &couchbase.VBucketServerMap{
 			ServerList: []string{"serverA"},
 			VBucketMap: [][]int{
-				[]int{0},
-				[]int{0},
-				[]int{0},
-				[]int{0},
+				{0},
+				{0},
+				{0},
+				{0},
 			},
 		},
 	}
@@ -805,10 +805,10 @@ func TestUPROpenStreamReq(t *testing.T) {
 		vbsm: &couchbase.VBucketServerMap{
 			ServerList: []string{"serverA"},
 			VBucketMap: [][]int{
-				[]int{0},
-				[]int{0},
-				[]int{0},
-				[]int{0},
+				{0},
+				{0},
+				{0},
+				{0},
 			},
 		},
 	}

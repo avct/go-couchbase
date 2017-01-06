@@ -26,9 +26,9 @@ import (
 	"sync"
 	"time"
 
+	"github.com/avct/go-couchbase"
+	"github.com/avct/go-couchbase/cbdatasource"
 	"github.com/couchbase/gomemcached"
-	"github.com/couchbase/go-couchbase"
-	"github.com/couchbase/go-couchbase/cbdatasource"
 )
 
 // Simple, memory-only sample program that uses the cbdatasource API's
@@ -286,7 +286,7 @@ func reportStats(b cbdatasource.BucketDataSource, force bool) {
 func dumpOnSignal(signals ...os.Signal) {
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, signals...)
-	for _ = range c {
+	for range c {
 		reportStats(bds, true)
 
 		log.Printf("dump: goroutine...")

@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	atomic "github.com/couchbase/go-couchbase/platform"
+	atomic "github.com/avct/go-couchbase/platform"
 	"io"
 	"io/ioutil"
 	"log"

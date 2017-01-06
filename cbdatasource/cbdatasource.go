@@ -30,7 +30,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/couchbase/go-couchbase"
+	"github.com/avct/go-couchbase"
 	"github.com/couchbase/gomemcached"
 	"github.com/couchbase/gomemcached/client"
 )
@@ -562,7 +562,7 @@ func (d *bucketDataSource) refreshWorkers() {
 	// worker needs to provide.
 	workers := make(map[string]chan []uint16)
 
-	for _ = range d.refreshWorkersCh { // Wait for a refresh kick.
+	for range d.refreshWorkersCh { // Wait for a refresh kick.
 		atomic.AddUint64(&d.stats.TotRefreshWorkers, 1)
 
 		d.m.Lock()

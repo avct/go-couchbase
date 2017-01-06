@@ -2,8 +2,8 @@ package main
 
 import (
 	"flag"
+	"github.com/avct/go-couchbase"
 	"github.com/couchbase/cbauth"
-	"github.com/couchbase/go-couchbase"
 	"log"
 	"net/url"
 )
