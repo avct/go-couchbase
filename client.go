@@ -46,6 +46,8 @@ var MaxBulkRetries = 5000
 // takes longer than that.
 var SlowServerCallWarningThreshold time.Duration
 
+var DefaultGetBulkTimeout = 20 * time.Millisecond
+
 func slowLog(startTime time.Time, format string, args ...interface{}) {
 	if elapsed := time.Now().Sub(startTime); elapsed > SlowServerCallWarningThreshold {
 		pc, _, _, _ := runtime.Caller(2)
@@ -242,9 +244,40 @@ func (b *Bucket) doBulkGet(vb uint16, keys []string,
 				return nil
 			}
 
-			m, err := conn.GetBulk(vb, keys)
-			pool.Return(conn)
+			type bulkResponse struct {
+				m   map[string]*gomemcached.MCResponse
+				err error
+			}
 
+			var (
+				m    map[string]*gomemcached.MCResponse
+				resp = make(chan bulkResponse, 1)
+			)
+
+			t := time.NewTimer(DefaultGetBulkTimeout)
+			defer t.Stop()
+
+			go func() {
+				var r bulkResponse
+				r.m, r.err = conn.GetBulk(vb, keys)
+				resp <- r
+			}()
+
+			select {
+			case r := <-resp:
+				m = r.m
+				err = r.err
+			case <-t.C:
+				// timeout
+				conn.Hijack() // mark this connection as unhealthy
+				go pool.Return(conn)
+				log.Printf("go-couchbase: getbulk request cancelled due to exceeding timeout (keys: %+v)", keys)
+				err := fmt.Errorf("getbulk request cancelled due to exceeding timeout")
+				ech <- err
+				return err
+			}
+
+			go pool.Return(conn) // return it asyncronously
 			switch err.(type) {
 			case *gomemcached.MCResponse:
 				st := err.(*gomemcached.MCResponse).Status
